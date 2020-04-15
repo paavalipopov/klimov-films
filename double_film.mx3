@@ -1,0 +1,29 @@
+sizeX := 5e-5;
+sizeY := 10e-6;
+sizeZ := 5.05e-6;
+SetGridSize(500, 50, 202);
+SetCellSize(1e-7, 2e-7, 25e-9);
+film1 := cuboid(sizeX, sizeY, 5e-6).transl(0, 0, -0.025e-6);
+film2 := cuboid(sizeX, sizeY, 0.05e-6).transl(0, 0, 2.5e-6); 
+setgeom(film1.add(film2));
+DefRegion(1, film1);
+DefRegion(2, film2);
+
+Msat.SetRegion(1, 1.39e5);
+Msat.SetRegion(2, 9.8e5);
+m = uniform(1, 0, 0);
+alpha = 0.001;
+B_ext = vector(1000e-4, 0, 0);
+relax();
+
+saveas(B_eff, "B_eff");
+B_plane := CropY(B_eff, 25, 26);
+saveas(B_plane, "B_plane");
+B_xaxis := CropZ(CropY(B_eff, 25, 26), 100, 101);
+saveas(B_xaxis, "B_xaxis");
+B_zaxis := CropX(CropY(B_eff, 25, 26), 250, 251);
+saveas(B_zaxis, "B_zaxis");
+
+m_plane := CropY(m_full, 25, 26);
+saveas(m_plane, "m_plane");
+	
